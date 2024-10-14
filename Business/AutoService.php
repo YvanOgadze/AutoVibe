@@ -13,10 +13,11 @@ class AutoService {
         $lijst = $autoDAO->getAutoLijst();
         return $lijst;
     }
-    public function getConsoleById(int $console_id) : array {
+    public function getAutoById(int $auto_id) : Auto {
         $autoDAO = new AutoDAO();
-        $lijst = $autoDAO->getAutoById($console_id);
-        return $lijst;
+        $autoData = $autoDAO->getAutoById($auto_id);
+        $auto = new Auto((int)$autoData["auto_id"], (string)$autoData["merk"]);
+        return $auto;
     }
     public function voegAutoToe(Auto $auto) : Auto {
         $autoDAO = new AutoDAO();

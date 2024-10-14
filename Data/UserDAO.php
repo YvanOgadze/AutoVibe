@@ -20,7 +20,7 @@ class UserDAO {
         $resultSet = $dbh->query($sql);
         $lijst = array();
         foreach($resultSet as $rij) {
-            $user = new User((int)$rij["user_id"], (string)$rij["username"], (string)$rij["geslacht"], (string)$rij["bio"]);
+            $user = new User((int)$rij["user_id"], (string)$rij["username"], (string)$rij["bio"]);
             array_push($lijst, $user);
         }
         $dbh = null;
@@ -61,15 +61,15 @@ class UserDAO {
         if ($rowcount > 0) {
             throw new GebruikerBestaatAlException();
         }
-        $sql = "insert into users (username, geslacht, bio, wachtwoord) values (:username, :geslacht, :bio, :wachtwoord)";
+        $sql = "insert into users (username, bio, wachtwoord, profielfoto) values (:username, :bio, :wachtwoord, :profielfoto)";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
 
         $stmt = $dbh->prepare($sql);
         $stmt->execute(array(
             ":username" => $user->getUserName(),
-            ":geslacht" => $user->getGeslacht(),
             ":bio" => $user->getBio(),
             ":wachtwoord" => $user->getWachtwoord(),
+            ":profielfoto" => $user->getProfielfoto()
         ));
         $dbh = null;
     }

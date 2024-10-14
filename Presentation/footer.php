@@ -1,3 +1,4 @@
+</div>
 <footer>
     © AutoVibe - Yvan Ogadze
 </footer>

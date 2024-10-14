@@ -9,16 +9,16 @@ class User {
     private static $idMap = array();
     private $user_id;
     private $username;
-    private $geslacht;
     private $bio;
     private $wachtwoord;
+    private $profielfoto;
     //Constructor
-    public function __construct($cuser_id = null, $cusername = null, $cgeslacht = null, $cbio = null, $cwachtwoord = null) {
+    public function __construct($cuser_id = null, $cusername = null, $cbio = null, $cwachtwoord = null, $profielfoto = null) {
         $this->user_id = $cuser_id;
         $this->username = $cusername;
-        $this->geslacht = $cgeslacht;
         $this->bio = $cbio;
         $this->wachtwoord = $cwachtwoord;        
+        $this->profielfoto = $profielfoto;
     }
     //Getters
     public function getUserId() {
@@ -27,21 +27,18 @@ class User {
     public function getUserName() {
         return $this->username;
     }
-    public function getGeslacht() {
-        return $this->geslacht;
-    }
     public function getBio() {
         return $this->bio;
     }
     public function getWachtwoord() {        
         return $this->wachtwoord;
     }
+    public function getProfielfoto() {
+        return $this->profielfoto;
+    }
     //Setters
     public function setUserName($username) {
         $this->username = $username;
-    }
-    public function setGeslacht($geslacht) {
-        $this->geslacht = $geslacht;
     }
     public function setBio($bio) {
         $this->bio = $bio;
@@ -52,9 +49,12 @@ class User {
         }
         $this->wachtwoord = password_hash($wachtwoord, PASSWORD_DEFAULT);
     }
-    public static function create(int $user_id, string $username, int $geslacht, string $bio, string $wachtwoord) {
+    public function setProfielfoto($profielfoto) {
+        $this->profielfoto = $profielfoto;
+    }
+    public static function create(int $user_id, string $username, string $bio, string $wachtwoord, string $profielfoto) {
         if (!isset(self::$idMap[$user_id])) {
-            self::$idMap[$user_id] = new User($user_id, $username, $geslacht, $bio, $wachtwoord);
+            self::$idMap[$user_id] = new User($user_id, $username, $bio, $wachtwoord, $profielfoto);
         }
         return self::$idMap[$user_id];
     }

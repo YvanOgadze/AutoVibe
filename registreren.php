@@ -7,7 +7,8 @@ use Entities\User;
 use Exceptions\GebruikerBestaatAlException;
 use Exceptions\WachtwoordenKomenNietOvereenException;
 
-$error = "";
+$errorUsername = "";
+$errorWachtwoord = "";
 
 if (isset($_POST["btnRegistreer"])) {
     $username = "";
@@ -18,36 +19,30 @@ if (isset($_POST["btnRegistreer"])) {
     if (!empty($_POST["txtUsername"])) {
         $username = $_POST["txtUsername"];
     } else {
-        $error .= "De gebruikersnaam moet ingevuld worden.<br>";
-    }
-
-    if (!empty($_POST["txtGeslacht"])) {
-        $geslacht = $_POST["txtGeslacht"];
-    } else {
-        $error .= "Geslacht moet ingevuld worden.<br>";
+        $errorUsername .= "De gebruikersnaam moet ingevuld worden.<br>";
     }
 
     if (!empty($_POST["txtBio"])) {
         $bio = $_POST["txtBio"];
     } else {
-        $error .= "Je bio moet ingevuld worden.<br>";
+        $bio = "Ik heb geen bio :(";
     }
 
     if (!empty($_POST["txtWachtwoord"]) && !empty($_POST["txtWachtwoordHerhaal"])) {
         $wachtwoord = $_POST["txtWachtwoord"];
         $wachtwoordHerhaal = $_POST["txtWachtwoordHerhaal"];
     } else {
-        $error .= "Beide wachtwoordvelden moeten ingevuld worden.<br>";
+        $errorWachtwoord .= "Beide wachtwoordvelden moeten ingevuld worden.<br>";
     }
     
     // ALS ER GEEN ERRORS ZIJN, VOER ONDERSTAANDE CODE UIT
-    if ($error == "") {
+    if ($errorUsername == "" && $errorWachtwoord == "") {
         try {
             $gebruiker = new User();
             $gebruiker->setUserName($username);
-            $gebruiker->setGeslacht($geslacht);
             $gebruiker->setBio($bio);
             $gebruiker->setWachtwoord($wachtwoord, $wachtwoordHerhaal);
+            $gebruiker->setProfielfoto("default_profile_pic.avif");
             
             $GebruikerSvc = new UserService();
             $GebruikerSvc->register($gebruiker);
@@ -60,21 +55,20 @@ if (isset($_POST["btnRegistreer"])) {
             $_SESSION["userId"] = $userId;
 
         } catch (WachtwoordenKomenNietOvereenException $e) {
-            $error .= "De ingevulde wachtwoorden komen niet overeen.<br>";
+            $errorWachtwoord .= "De ingevulde wachtwoorden komen niet overeen.<br>";
         } catch (GebruikerBestaatAlException $e) {
-            $error .= "Er bestaat al een gebruiker met deze gebruikersnaam.<br>";
+            $errorUsername .= "Er bestaat al een gebruiker met deze gebruikersnaam.<br>";
         }         
     }
 }
 
-if ($error == "" && isset($_SESSION["gebruiker"])) {
-    header("location: Presentation/viewGegevensAangemaakt.php");
+if ($errorUsername == "" && $errorWachtwoord == "" && isset($_SESSION["gebruiker"])) {
+    header("location: overzicht.php");
     exit;
-} else if ($error != "") {
-    echo "<span style=\"color:red;\">" . $error . "</span>";
 }
 
 if (!isset($_SESSION["gebruiker"])) {
     include("Presentation/header.php");
+    include("Presentation/viewRegistreren.php");
     include("Presentation/footer.php");
 }

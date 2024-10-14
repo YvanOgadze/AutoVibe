@@ -9,7 +9,8 @@ use Entities\User;
 use Exceptions\GebruikerBestaatNietException;
 use Exceptions\WachtwoordenKomenNietOvereenException;
 
-$error = "";
+$errorUsername = "";
+$errorWachtwoord = "";
 if (isset($_POST["btnLogin"])) {
     $username = "";
     $wachtwoord = "";
@@ -17,18 +18,18 @@ if (isset($_POST["btnLogin"])) {
     if (!empty($_POST["txtUsername"])) {
         $username = $_POST["txtUsername"];
     } else {
-        $error .= "De gebruikersnaam moet ingevuld worden.<br>";
+        $errorUsername .= "De gebruikersnaam moet ingevuld worden.<br>";
     }
 
     if (!empty($_POST["txtWachtwoord"])) {
         $wachtwoord = $_POST["txtWachtwoord"];
     } else {
-        $error .= "Het wachtwoord moet ingevuld worden.<br>";
+        $errorWachtwoord .= "Het wachtwoord moet ingevuld worden.<br>";
     }
 
-    if ($error == "") {
+    if ($errorUsername == "" && $errorWachtwoord == "") {
         try {
-            $gebruiker = new User(null, $username, null, null, null, $wachtwoord);
+            $gebruiker = new User(null, $username, null, $wachtwoord);
             $gebruikerSvc= new UserService();
             $gebruikerSvc = $gebruikerSvc->login($gebruiker);
             $_SESSION["gebruiker"] = serialize($gebruiker);
@@ -36,23 +37,20 @@ if (isset($_POST["btnLogin"])) {
             
             $gebruikerNieuw = new UserService();
             $gebruikerData = $gebruikerNieuw->getUserByName($username);
-            $_SESSION["rol"] = $gebruikerData->getRol();
             
-            $userId = $gebruiker->getUserId();
+            $userId = $gebruikerData->getUserId();
             $_SESSION["userId"] = $userId;
         } catch (WachtwoordenKomenNietOvereenException $e) {
-            $error .= "Het wachtwoord is niet correct.<br>";
+            $errorWachtwoord .= "Het wachtwoord is niet correct.<br>";
         } catch (GebruikerBestaatNietException $e) {
-            $error .= "Er bestaat geen gebruiker met deze username.<br>";
+            $errorUsername .= "Er bestaat geen gebruiker met deze username.<br>";
         }
     }
 }
 
-if ($error == "" && isset($_SESSION["gebruiker"])) {
+if ($errorUsername == "" && $errorWachtwoord == "" &&  isset($_SESSION["gebruiker"])) {
     header("location: overzicht.php");
     exit;
-} else if ($error != "") {
-    echo "<span style=\color:red;\">" . $error . "</span>";
 }
 
 if (!isset($_SESSION["gebruiker"])) {

@@ -19,7 +19,7 @@ class PostService {
         $post = new Post((int)$postData["post_id"], (int)$postData["user_id"], (int)$postData["auto_id"], (int)$postData["bouwjaar"], (string)$postData["img"], (float)$postData["omschrijving"]);
         return $post;
     }
-    public function getGameByUserId(int $user_id) : array {
+    public function getPostByUserId(int $user_id) : array {
         $postDAO = new PostDAO();
         $lijst = $postDAO->getPostByUserId($user_id);
         return $lijst;

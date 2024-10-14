@@ -15,13 +15,13 @@ class UserService {
     public function getUserByName(string $username): User {
         $UserDAO = new UserDAO();
         $UserData = $UserDAO->getUserByName($username);
-        $user = new User((int)$UserData["user_id"], (int)$UserData["leeftijd"], (string)$UserData["bio"], (string)$UserData["wachtwoord"]);
+        $user = new User((int)$UserData["user_id"], (string)$UserData["bio"], (string)$UserData["wachtwoord"], (string)$UserData["profielfoto"]);
         return $user;
     }
     public function getUserByUserId(int $userId): User {
         $UserDAO = new UserDAO();
         $UserData = $UserDAO->getUserById($userId);
-        $user = new User((int)$UserData["user_id"], (string)$UserData["username"],  (int)$UserData["leeftijd"], (string)$UserData["bio"], (string)$UserData["wachtwoord"]);
+        $user = new User((int)$UserData["user_id"], (string)$UserData["username"], (string)$UserData["bio"], (string)$UserData["wachtwoord"], (string)$UserData["profielfoto"]);
         return $user;
     }
     public function usernameReedsInGebruik(string $username): int {

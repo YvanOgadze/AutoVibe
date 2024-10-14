@@ -10,7 +10,7 @@ use Entities\Post;
 
 class PostDAO {
     public function getPostLijst() : array {
-        $sql = "select * from posts";
+        $sql = "select * from posts order by post_id desc";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
 
         $resultset = $dbh->query($sql);
@@ -23,7 +23,7 @@ class PostDAO {
         return $lijst;
     }
     public function getPostByPostId(int $post_id) {
-        $sql = "select * from posts where post_id = :post_id";
+        $sql = "select * from posts where post_id = :post_id order by post_id desc";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
 
         $stmt = $dbh->prepare($sql);
@@ -33,7 +33,7 @@ class PostDAO {
         return $rij;
     }
     public function getPostByAutoId(int $auto_id) : array {
-        $sql = "select * from posts where auto_id = :auto_id";
+        $sql = "select * from posts where auto_id = :auto_id order by post_id desc";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
 
         $stmt = $dbh->prepare($sql);
@@ -48,7 +48,7 @@ class PostDAO {
         return $lijst;
     }
     public function getPostByUserId(int $user_id) : array {
-        $sql = "select * from posts where user_id = :user_id";
+        $sql = "select * from posts where user_id = :user_id order by post_id desc";
         $dbh = new PDO(DBConfig::$DB_CONNSTRING, DBConfig::$DB_USERNAME, DBConfig::$DB_PASSWORD);
 
         $stmt = $dbh->prepare($sql);
